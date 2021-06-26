@@ -121,8 +121,9 @@ public class SeTu extends BotPlugin {
 
         if ("count".equals(keyword)) {
             String setuCount = redisUtil.get(BOT_SETU_COUNT);
-            return builder.text("今天咱发了").text(setuCount).text("份色图，要节制啊QwQ");
+            return builder.text("今天咱发了").text(setuCount).text("份色图，少看涩图，一分钟不超过五张，手离几把越近，健康离你越远。");
         }
+
         String seTuApi = getSeTuApi(keyword, 1);
         if (seTuApi.contains("null")) {
             builder.text("没有这种涩图，可能你的性癖太怪了:P");

@@ -13,6 +13,7 @@ spring:
       - moe.iacg.miraiboot.plugins.RecordToMp3 #
       - moe.iacg.miraiboot.plugins.AddMe #
       - moe.iacg.miraiboot.plugins.Rcon #
+      - moe.iacg.miraiboot.plugins.QueryMCServer #
       - moe.iacg.miraiboot.plugins.Hpool #
 
   #      - moe.iacg.miraiboot.plugins.Telegram #

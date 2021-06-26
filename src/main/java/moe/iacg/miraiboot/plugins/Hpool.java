@@ -38,14 +38,15 @@ import java.util.List;
 @CommandPrefix(command = Commands.HPOOL)
 public class Hpool extends BotPlugin {
 
-    private static String hpoolApi = "https://hpool.com/api/pool/miningdetail?language=zh&type=chia&count=100&page=";
+    private static String hpoolApi = "https://hpool.co/api/pool/miningdetail?language=zh&type=chia&count=100&page=";
 
     //    private static final String xchPriceChart = "https://api2.chiaexplorer.com/chart/xchPriceChart?period=24h";
     private static final String xchPriceChartForOKEX = "https://www.okex.com/v2/spot/instruments/XCH-USDT/candles?size=1&granularity=20";
 
-    private static final String lastMiningInComeRecord = "https://hpool.com/api/pool/miningincomerecord?language=zh&type=chia&count=1&page=1";
+    private static final String lastMiningInComeRecord = "https://hpool.co/api/pool/miningincomerecord?language=zh&type=chia&count=1&page=1";
+    private static final String totalAssets = "https://hpool.co/api/assets/totalassets";
     @NacosValue("${hpool.cookie}")
-    private String hpoolCookie;
+    private String selfHpoolCookie;
 
     @Autowired
     private UserStatusService userStatusService;
@@ -64,13 +65,12 @@ public class Hpool extends BotPlugin {
 
         if (StringUtils.isEmpty(cookie)) {
 
-            String hpoolCookie = userStatus.getHpoolCookie();
-            if (StringUtils.isEmpty(hpoolCookie)) {
+            if (userStatus==null||StringUtils.isEmpty(userStatus.getHpoolCookie())) {
                 builder.text("您未设置Hpool Cookie");
                 return botUtils.sendMessage(bot, event, builder);
             }
 
-            Msg hpoolDataMsg = getHpoolDataMsg(hpoolCookie);
+            Msg hpoolDataMsg = getHpoolDataMsg(userStatus.getHpoolCookie());
             return botUtils.sendMessage(bot, event, hpoolDataMsg);
 
         } else {
@@ -102,7 +102,7 @@ public class Hpool extends BotPlugin {
 
     private Msg getHpoolDataMsg(String cookie) {
         if (cookie == null) {
-            cookie = hpoolCookie;
+            cookie = selfHpoolCookie;
         }
         int page = 1;
         List<HpoolMiningDetail.Data.Settlement> allData = new ArrayList<>();
@@ -132,14 +132,13 @@ public class Hpool extends BotPlugin {
         Msg builder = Msg.builder();
         builder.text("哈池CHIA结算情况统计：\n");
         builder.text("最近一次结算时间：").text(convertTime(lastMiningInComeRecord.getDate("record_time").getTime() * 1000))
-                .text("\n结算XCH：").text(lastMiningInComeRecord.getString("amount")).text("\n");
+                .text("--XCH：").text(lastMiningInComeRecord.getString("amount")).text("\n");
+        builder.text("当前可提现余额：").text(totalAssets(cookie)).text("\n");
         builder.text("当日未结算XCH：" + unSettlement.divide(new BigDecimal(2), 8, RoundingMode.HALF_EVEN)).text("\n");
         builder.text("已结算XCH：" + settlements.divide(new BigDecimal(2), 8, RoundingMode.HALF_EVEN)).text("\n");
         builder.text("矿池总收益XCH：" + count.divide(new BigDecimal(2), 8, RoundingMode.HALF_EVEN)).text("\n");
         builder.text("OKEX实时XCH价格：" + currentXCHPriceChart().divide(new BigDecimal(1), 2, RoundingMode.HALF_EVEN)).text("\n");
         builder.text("矿池总收益USDT：" + count.multiply(currentXCHPriceChart()).divide(new BigDecimal(2), 8, RoundingMode.HALF_EVEN)).text("\n");
-
-        builder.text("（如上统计总收益已除2才与实际收益核对上,怀疑矿池偷吃50%");
         return builder;
     }
 
@@ -153,6 +152,18 @@ public class Hpool extends BotPlugin {
                 .getJSONObject("data").getJSONArray("list").getJSONObject(0);
 
         return jsonObject;
+
+    }
+
+    private String totalAssets(String cookie){
+        HttpRequest request = HttpUtil.createGet(totalAssets);
+        request.cookie(new HttpCookie("auth_token", cookie));
+        HttpResponse execute = request.execute();
+        String data = execute.body();
+        JSONObject jsonObject = JSON.parseObject(data)
+                .getJSONObject("data").getJSONArray("list").getJSONObject(1);
+
+        return jsonObject.getString("balance");
 
     }
 

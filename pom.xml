@@ -65,6 +65,21 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.tekgator</groupId>
+            <artifactId>JAVA-QueryMinecraftServer</artifactId>
+            <version>1.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-simple</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>io.github.mzdluo123</groupId>-->
 <!--            <artifactId>silk4j</artifactId>-->

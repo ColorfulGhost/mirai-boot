@@ -44,7 +44,7 @@ public enum Commands {
     RCON("rcon", "Minecraft服务端RCON命令（管理员权限）"),
 
     HPOOL("hpool", "矿池相关命令"),
-
+    QMCS("qmcs", "查询MC服务器状态/qmcs mc.cn 25565"),
     //        STATISTIC("statistic", "获取玩家在线统计数据"),
     BIND("bind", "QQ绑定Minecraft账号。私聊我，如：/bind yjx4 password"),
 
