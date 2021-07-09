@@ -1,6 +1,6 @@
 package moe.iacg.miraiboot.plugins;
 
-import cn.hutool.core.text.StrSpliter;
+import cn.hutool.core.text.StrSplitter;
 import lombok.extern.slf4j.Slf4j;
 import moe.iacg.miraiboot.annotation.CommandPrefix;
 import moe.iacg.miraiboot.entity.UserStatus;
@@ -60,7 +60,7 @@ public class Bangumi extends BotPlugin {
         }
 
         if (acceptMessage.startsWith("rm ")) {
-            List<String> bgmIds = StrSpliter.split(acceptMessage, " ", true, true);
+            List<String> bgmIds = StrSplitter.split(acceptMessage, " ", true, true);
             StringBuilder excludeBGMIds = new StringBuilder();
 
             for (int i = 1; i < bgmIds.size(); i++) {
@@ -72,7 +72,7 @@ public class Bangumi extends BotPlugin {
                 UserStatus.setBangumiExclude(excludeBGMIds.toString());
                 userStatusService.update(UserStatus);
             } else {
-                UserStatus.setBangumiExclude(bangumiExclude + excludeBGMIds.toString());
+                UserStatus.setBangumiExclude(bangumiExclude + excludeBGMIds);
                 userStatusService.update(UserStatus);
             }
             messageBuilder.text("已经移除番号：" + excludeBGMIds.toString() + "订阅。");

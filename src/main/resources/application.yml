@@ -5,7 +5,7 @@ spring:
       - moe.iacg.miraiboot.plugins.Log #
       - moe.iacg.miraiboot.plugins.SeTu #
       - moe.iacg.miraiboot.plugins.StartServer #
-      - moe.iacg.miraiboot.plugins.Watch #
+      - moe.iacg.miraiboot.plugins.AllFilterMsg #
       - moe.iacg.miraiboot.plugins.Anime #
       - moe.iacg.miraiboot.plugins.Bangumi #
       - moe.iacg.miraiboot.plugins.Genshin #
@@ -15,6 +15,7 @@ spring:
       - moe.iacg.miraiboot.plugins.Rcon #
       - moe.iacg.miraiboot.plugins.QueryMCServer #
       - moe.iacg.miraiboot.plugins.Hpool #
+      - moe.iacg.miraiboot.plugins.Upload #
 
   #      - moe.iacg.miraiboot.plugins.Telegram #
   jpa:

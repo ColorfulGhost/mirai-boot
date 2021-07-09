@@ -1,5 +1,6 @@
 package moe.iacg.miraiboot.plugins;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.tekgator.queryminecraftserver.api.Protocol;
 import com.tekgator.queryminecraftserver.api.QueryException;
 import com.tekgator.queryminecraftserver.api.QueryStatus;
@@ -16,10 +17,11 @@ import onebot.OnebotEvent;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
-@CommandPrefix(command = Commands.QMCS, alias = {"有人吗", "服里"})
+@CommandPrefix(command = Commands.MCSTATUS, alias = {"有人吗", "服里"})
 public class QueryMCServer extends BotPlugin {
     @Autowired
     RCONUtils rconUtils;
@@ -36,18 +38,18 @@ public class QueryMCServer extends BotPlugin {
 
         Msg builder = Msg.builder();
 
-        String content = BotUtils.removeCommandPrefix(Commands.QMCS.getCommand(), rawMessage);
+        String content = BotUtils.removeCommandPrefix(Commands.MCSTATUS.getCommand(), rawMessage);
 
         String[] contentTexts = content.split(" ");
-
-        String ip;
         int port = 25565;
-        if (contentTexts.length == 0) {
+        String ip;
+        if (StringUtils.isEmpty(content)) {
             ip = "39.101.143.24";
-        }else {
+
+        } else {
             ip = contentTexts[0];
-            if (content.length()==2){
-                port  = Integer.parseInt(contentTexts[1]);
+            if (content.length() == 2) {
+                port = Integer.parseInt(contentTexts[1]);
             }
         }
 
@@ -67,11 +69,20 @@ public class QueryMCServer extends BotPlugin {
         }
         Status.Players players = status.getPlayers();
         int onlinePlayers = players.getOnlinePlayers();
-        builder.text("当前在线玩家：" + onlinePlayers + "人");
+        Status.Players.Player[] playerEntry = players.getPlayer();
+        if (onlinePlayers == 0) {
+            builder.text("当前无玩家在线。");
+            return builder;
+        }
+        builder.text("当前在线玩家：" + onlinePlayers + "人\n");
 
+        if (ArrayUtil.isNotEmpty(playerEntry)) {
+            for (Status.Players.Player player : playerEntry) {
+                builder.text(player.getName() + "\n");
+            }
+        }
         Status.Version version = status.getVersion();
-        String versionName = version.getName();
-
+        builder.text("当前服务端版本：" + version.getName());
 
         return builder;
     }

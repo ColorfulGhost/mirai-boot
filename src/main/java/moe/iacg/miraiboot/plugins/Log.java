@@ -1,15 +1,19 @@
 package moe.iacg.miraiboot.plugins;
 
 import lombok.extern.slf4j.Slf4j;
+import moe.iacg.miraiboot.utils.BotUtils;
 import net.lz1998.pbbot.bot.Bot;
 import net.lz1998.pbbot.bot.BotPlugin;
 import onebot.OnebotEvent;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class Log extends BotPlugin {
+    @Autowired
+    private BotUtils botUtils;
     @Override
     public int onPrivateMessage(@NotNull Bot bot, @NotNull OnebotEvent.PrivateMessageEvent event) {
         log.info("收到私聊消息 QQ：{} 内容：{}", event.getUserId(), event.getRawMessage());

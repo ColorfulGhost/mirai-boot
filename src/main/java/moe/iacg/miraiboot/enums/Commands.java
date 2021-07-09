@@ -20,34 +20,21 @@ public enum Commands {
     TOMP3("tomp3", "聊天语音转mp3"),
     IOT("iot", "基于mqtt的物联网功能 （老王自家使用）"),
     SWITCH("iot", "基于mqtt的物联网功能 （老王自家使用）"),
-
     BGM("bgm", "开启新番更新提醒(大陆未购买版权则不会提醒)，排除你不喜欢的新番如:/bgm rm 240835"),
-
     SETU("setu", "涩图！可加关键字，r18五五开检索。如：/setu yjx4"),
-
     AMQ("amq", "到点了，网抑云开启 (AMQ <anti-motivational quotes>)"),
-
     MCSM("mcsm", "二级命令 status、start_server、stop_server"),
-
     WATCH("watch", "谁在窥屏"),
-
     ANIME("anime", "以图搜番"),
-
     LIST("list", "查看在线玩家列表w"),
-
     MIBAND("miband", "查看老王今日运动数据"),
-
     LSP("lsp", "调用涩图API次数"),
-
     HITOKOTO("hitokoto", "一言"),
-
     RCON("rcon", "Minecraft服务端RCON命令（管理员权限）"),
-
     HPOOL("hpool", "矿池相关命令"),
-    QMCS("qmcs", "查询MC服务器状态/qmcs mc.cn 25565"),
-    //        STATISTIC("statistic", "获取玩家在线统计数据"),
+    MCSTATUS("mcstatus", "查询MC服务器状态：/mcstatus cirnocraft.club 25565"),
+    UPLOAD("upload", "上传到onedrive"),
     BIND("bind", "QQ绑定Minecraft账号。私聊我，如：/bind yjx4 password"),
-
     EDIT_PASSWORD("password", "修改Minecraft账户密码，私聊我，如：/password yjx4prprpr");
 //    WORD("word", "填充语料库，正则测试网站：https://regexr.com/ ，正则表达式匹配(Java正则)。" +
 //            "\n如精准匹配：/word exact yjx4のドレス何色なの？ 可愛いの色 " +

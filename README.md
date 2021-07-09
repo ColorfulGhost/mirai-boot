@@ -16,6 +16,9 @@
 - [x] Telegram群与QQ群消息互通
 - [x] 复读姬
 - [x] MCSM远程服务端控制
+- [x] 对地理位置处理成文字信息返回
+- [x] QQ语音消息转换Mp3并生成链接
+- [x] Hpool的XCH矿池和XCH币价实时查询
 - [x] Bot功能更新提示通知(GithubWebHook)
 
 ...

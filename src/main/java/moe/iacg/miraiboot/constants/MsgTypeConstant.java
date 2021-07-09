@@ -7,4 +7,5 @@ public class MsgTypeConstant {
     public static final String FACE = "face";
     public static final String REPLY = "reply";
     public static final String RECORD = "record";
+    public static final String LIGHT_APP = "light_app";
 }
