@@ -4,7 +4,7 @@
 ## 环境需求
 1. Redis
 2. MySQL
-3. Nacos
+3. Nacos(所有配置文件都在Nacos集中配置管理中)
 4. JDK11
 
 ### 已功能实现
