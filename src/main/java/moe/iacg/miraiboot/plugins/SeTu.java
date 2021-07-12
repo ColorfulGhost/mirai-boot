@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -111,7 +112,7 @@ public class SeTu extends BotPlugin {
                 return builder;
             }
 
-            return batchGetSeTuApi(number);
+            return batchGetSeTuApi(keywords,number);
 
         } else {
             if (keywords.size() > 1) {
@@ -148,24 +149,29 @@ public class SeTu extends BotPlugin {
         }
         requestData.put("r18", r18);
 
-        var result = loliconProxyURL + ReUtil.get("href=\"(.*)\">",
+         return loliconProxyURL + ReUtil.get("href=\"(.*)\">",
                 HttpUtil.get(loliconProxyURL + "/lolicon", requestData), 1);
-        return result;
     }
 
     @SneakyThrows
-    public Msg batchGetSeTuApi(int size) {
+    public Msg batchGetSeTuApi(List<String> keywords,int size) {
+        List<String> ren = keywords.stream().filter(str -> ReUtil.contains("(.*)\\/n$", str)).collect(Collectors.toList());
+        String keywordStr = null;
+        if (!CollectionUtils.isEmpty(ren)){
+            keywordStr =ren.get(0).split("/n")[0];
+        }
         Msg builder = Msg.builder();
         List<CompletableFuture<String>> futures = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            CompletableFuture<String> seTuFuture = CompletableFuture.supplyAsync(() -> getSeTuApi(null, 0));
+            String finalKeywordStr = keywordStr;
+            CompletableFuture<String> seTuFuture = CompletableFuture.supplyAsync(() -> getSeTuApi(finalKeywordStr, 0));
             futures.add(seTuFuture);
         }
         CompletableFuture<Void> cfFetch = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
 
         CompletableFuture<List<String>> listCompletableFuture = cfFetch.thenApply(future ->
                 futures.stream()
-                        .map(completableFuture -> completableFuture.join()).collect(Collectors.toList()));
+                        .map(CompletableFuture::join).collect(Collectors.toList()));
 
         for (String url : listCompletableFuture.get()) {
             builder.image(url);
@@ -179,7 +185,6 @@ public class SeTu extends BotPlugin {
      * @param keyword 若指定关键字，将会返回从插画标题、作者、标签中模糊搜索的结果
      * @param r18     0为非 R18，1为 R18，2为混合
      * @param num     一次返回的结果数量，范围为1到10，不提供 APIKEY 时固定为1；在指定关键字的情况下，结果数量可能会不足指定的数量
-     * @return
      */
 
 
